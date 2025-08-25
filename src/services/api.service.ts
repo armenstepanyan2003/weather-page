@@ -1,10 +1,10 @@
-import {apiUrls} from "../config/apiConfig.ts";
+import {apiUrls} from "../config/apiConfig";
 
 class ApiService {
     constructor() {
-    }
+    };
 
-    async getWeatherByCity(city) {
+    async getWeatherByCity(city: string) {
         const finalUrl = `${apiUrls.WEATHER_API}&q=${city}`;
 
         try {
@@ -16,17 +16,26 @@ class ApiService {
             console.log(`Weather: ${error}`);
             throw new Error('Failed to fetch weather api');
         }
+    };
+
+
+    async getFiveDayForecast(query: string) {
+        const daysUrl = `${apiUrls.FIVE_DAY_API}&q=${query}`
+
+        try {
+            const res = await fetch(daysUrl);
+            const data = await res.json();
+
+            return data;
+        } catch (error) {
+            console.log(`FiveDayForecast: ${error}`);
+            throw new Error('Failed to fetch FiveDayForecast api')
+
+        }
     }
-
-
-
-    // async getAllCitesData (cities) {
-    //     return Promise.all(cities.map((city) => {
-    //         return this.getWeatherByCity(city);
-    //     }));
-    // };
-}
+};
 
 const apiService = new ApiService();
 
 export default apiService;
+
