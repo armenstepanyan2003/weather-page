@@ -24,10 +24,13 @@ const FavoritesProvider: FC<IFavoritesProvider> = ({ children }) => {
     }, [cities]);
 
     const addCity = (city: string) => {
-        if(!cities.includes(city)) {
+        const cityLower = city.toLowerCase()
+        const check = cities.some(city => city.toLowerCase() === cityLower)
+
+        if(!check) {
             setCities(prevState => [...prevState, city]);
         } else return city;
-    }
+    };
 
     return (
         <FavoriteProviderContext.Provider value={{

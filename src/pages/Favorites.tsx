@@ -41,7 +41,7 @@ const Favorites = () => {
                             className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-700"
                             aria-label={`Delete ${value}`}
                         >
-                            &times;
+                            x
                         </button>
                     </div>
                 ))}
@@ -53,7 +53,6 @@ const Favorites = () => {
                 )}
             </div>
         </div>
-
     );
 };
 

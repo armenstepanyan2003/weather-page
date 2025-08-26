@@ -19,8 +19,8 @@ class ApiService {
     };
 
 
-    async getFiveDayForecast(query: string) {
-        const daysUrl = `${apiUrls.FIVE_DAY_API}&q=${query}`
+    async getFiveDayForecast(query:string, units: string) {
+        const daysUrl = `${apiUrls.FIVE_DAY_API}&q=${query}&units=${units}`;
 
         try {
             const res = await fetch(daysUrl);
@@ -33,7 +33,7 @@ class ApiService {
 
         }
     }
-};
+}
 
 const apiService = new ApiService();
 

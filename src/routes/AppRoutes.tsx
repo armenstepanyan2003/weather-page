@@ -6,10 +6,12 @@ import Navbar from '../components/Navbar';
 import CurrentLocation from '../pages/CurrentLocation';
 import SearchedForecast from "../pages/SearchedForecast";
 import FavoritesProvider from "../providers/FavoritesProvider";
+import TemperatureProvider from "../providers/TemperatureProvider";
 
 function AppRoutes() {
     return (
         <BrowserRouter>
+            <TemperatureProvider>
             <Navbar />
             <FavoritesProvider>
                 <Routes>
@@ -21,7 +23,9 @@ function AppRoutes() {
                     <Route path="/favorites" element={<Favorites />} />
                     <Route path="/searchedForecast" element={<SearchedForecast />} />
                 </Routes>
+
             </FavoritesProvider>
+        </TemperatureProvider>
         </BrowserRouter>
     );
 }

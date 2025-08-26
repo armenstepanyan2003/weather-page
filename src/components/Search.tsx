@@ -8,18 +8,22 @@ const Search = () => {
     const handleSearch = () => {
         if (query.trim()) {
             navigate(`/searchedForecast?query=${encodeURIComponent(query.trim())}`);
+            setQuery("")
         }
-    }
+    };
 
     return (
         <div className="flex items-center border border-gray-300 rounded overflow-hidden w-full max-w-md">
             <input
                 type="text"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                    setQuery(e.target.value)
+                }}
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         handleSearch();
+                        setQuery("");
                     }
                 }}
                 placeholder="Search..."
