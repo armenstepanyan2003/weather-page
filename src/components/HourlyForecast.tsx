@@ -1,27 +1,6 @@
 import * as React from "react";
 import {WEATHER_IMAGE_URL} from "../config/apiConfig";
-
-interface HourlyForecastProps {
-    days: number[];
-    selectedDayIndex: number;
-    fiveDayForecast: {
-        list: {
-            dt_txt: string;
-            main: {
-                temp: number;
-                humidity: number;
-            };
-            weather: {
-                description: string;
-                icon: string;
-            }[];
-            wind: {
-                speed: number;
-            };
-        }[];
-    };
-    convertTemp: (temp: number) => string;
-}
+import type { HourlyForecastProps } from '../constants'
 
 const HourlyForecast:React.FC<HourlyForecastProps> = ({days,selectedDayIndex,fiveDayForecast,convertTemp}) => {
     return (

@@ -4,8 +4,8 @@ class ApiService {
     constructor() {
     };
 
-    async getWeatherByCity(city: string) {
-        const finalUrl = `${apiUrls.WEATHER_API}&q=${city}`;
+    async getWeatherByCity(city: string, units: string) {
+        const finalUrl = `${apiUrls.WEATHER_API}&q=${city}&units=${units}`;
 
         try {
             const res = await fetch(finalUrl);

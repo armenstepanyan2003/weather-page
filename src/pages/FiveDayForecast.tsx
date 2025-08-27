@@ -4,73 +4,49 @@ import apiService from '../services/api.service';
 import { useTemperatureProvider } from '../providers/TemperatureProvider';
 import DaysForecast from '../components/DaysForecast';
 import HourlyForecast from '../components/HourlyForecast';
+import { convertTemp } from '../helpers/temperatureHelper';
+import type {ForecastItem, FiveDayForecastData, FiveDayForecastProps } from '../constants'
 
-interface Weather {
-    description: string
-    icon: string
-}
 
-interface Main {
-    temp: number
-    humidity: number
-}
+const getDayIndexes = (list: ForecastItem[]): number[] => {
+    const dayIndexes: number[] = [];
+    const dates: string[] = [];
 
-interface Wind {
-    speed: number
-}
+    for (let index = 0; index < list.length; index++) {
+        const date = new Date(list[index].dt_txt).toDateString();
 
-interface ForecastItem {
-    dt_txt: string
-    weather: Weather[]
-    main: Main
-    wind: Wind
-}
+        if (!dates.includes(date)) {
+            dates.push(date);
+            dayIndexes.push(index);
+        }
+    }
+    return dayIndexes;
+};
 
-interface FiveDayForecastData {
-    cod: string
-    list: ForecastItem[]
-}
-
-interface FiveDayForecastProps {
-    query?: string
-    units?: string
-    onError?: (message: string) => void
-}
-
-const FiveDayForecast: React.FC<FiveDayForecastProps> = ({
-    query = 'Yerevan',
-    onError,
-}) => {
-    const [fiveDayForecast, setFiveDayForecast] =
-        useState<FiveDayForecastData | null>(null)
+const FiveDayForecast: React.FC<FiveDayForecastProps> = ({ query = 'Yerevan', onError, }) => {
+    const [fiveDayForecast, setFiveDayForecast] = useState<FiveDayForecastData | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const [error] = useState<string>('')
-    const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(
-        null
-    )
+    const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null)
+    const [days, setDays] = useState<number[]>([]);
     const { unit } = useTemperatureProvider()
 
     const units = unit === 'C' ? 'metric' : 'imperial'
-
-    const convertTemp = (volume: number) => {
-        return `${Math.round(volume)}${(unit === 'C') ? '°C' : '°F'}`;
-    }
-
-    const days = [0, 3, 11, 19, 27]
 
     useEffect(() => {
         const fetchFiveDay = async () => {
             setLoading(true)
 
             try {
-                const data = await apiService.getFiveDayForecast(query, units)
+                const data = await apiService.getFiveDayForecast(query, units);
 
                 if (data.cod === '404') {
-                    onError?.('The city was not found.')
-                    setFiveDayForecast(null)
+                    onError?.('The city was not found.');
+                    setFiveDayForecast(null);
                 } else {
-                    setFiveDayForecast(data)
-                    onError?.('')
+                    setFiveDayForecast(data);
+                    setDays(getDayIndexes(data.list));
+                    onError?.('');
                 }
             } catch (e) {
                 console.error(e)
@@ -99,7 +75,7 @@ const FiveDayForecast: React.FC<FiveDayForecastProps> = ({
                 fiveDayForecast={fiveDayForecast}
                 selectedDayIndex={selectedDayIndex}
                 setSelectedDayIndex={setSelectedDayIndex}
-                convertTemp={convertTemp}
+                convertTemp={(volume) => convertTemp(volume, unit)}
             />
 
             {selectedDayIndex !== null && (
@@ -107,7 +83,7 @@ const FiveDayForecast: React.FC<FiveDayForecastProps> = ({
                     days={days}
                     selectedDayIndex={selectedDayIndex}
                     fiveDayForecast={fiveDayForecast}
-                    convertTemp={convertTemp}
+                    convertTemp={(volume) => convertTemp(volume, unit)}
                 />
             )}
         </div>

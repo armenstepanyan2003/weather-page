@@ -1,29 +1,20 @@
 import * as React from "react";
 import {WEATHER_IMAGE_URL} from "../config/apiConfig";
+import type { DaysForecastProps } from '../constants'
 
-interface DaysForecastProps {
-    days: number[];
-    fiveDayForecast: {
-        list: {
-            dt_txt: string;
-            main: {
-                temp: number;
-            };
-            weather: {
-                icon: string;
-            }[];
-        }[];
-    };
-    selectedDayIndex: number | null;
-    setSelectedDayIndex: (index: number) => void;
-    convertTemp: (temp: number) => string;
-}
-
-const DaysForecast: React.FC<DaysForecastProps> = ({days,fiveDayForecast,selectedDayIndex,setSelectedDayIndex,convertTemp}) => {
+const DaysForecast: React.FC<DaysForecastProps> = ({days, fiveDayForecast, selectedDayIndex, setSelectedDayIndex, convertTemp}) => {
     return (
         <div className="flex justify-between gap-6">
-            {days.map((value,index) => {
-                const iconId = fiveDayForecast.list[value].weather[0].icon;
+            {days.slice(0, 5).map((value,index) => {
+                const endIndex = days.length - 1 !== index ? days[index + 1] : fiveDayForecast.list.length;
+
+                const dayItems = fiveDayForecast.list.slice(value, endIndex);
+
+                const temps = dayItems.map(item => item.main.temp);
+                const minTemp = Math.min(...temps);
+                const maxTemp = Math.max(...temps);
+
+                const iconId = dayItems[0].weather[0].icon;
                 return (
                     <div
                         key={value}
@@ -43,9 +34,24 @@ const DaysForecast: React.FC<DaysForecastProps> = ({days,fiveDayForecast,selecte
                             src={WEATHER_IMAGE_URL.replace("[iconId]", iconId)}
                             alt="iconid"
                             className="w-16 h-16 mb-3"/>
-                        <p className="text-xl font-bold">
-                            temperature: {convertTemp(fiveDayForecast.list[value].main.temp)}
-                        </p>
+                        <div className="flex gap-10">
+                            <div>
+                                <p>
+                                    Min
+                                </p>
+                                <p className="text-xl font-bold">
+                                    {convertTemp(minTemp)}
+                                </p>
+                            </div>
+                            <div>
+                                <p>
+                                    Max
+                                </p>
+                                <p className="text-xl font-bold">
+                                    {convertTemp(maxTemp)}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 );
             })}

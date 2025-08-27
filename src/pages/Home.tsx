@@ -26,6 +26,7 @@ const Home = () => {
                     Five Day Forecast
                 </NavLink>
             </nav>
+
             <Outlet />
         </div>
     );

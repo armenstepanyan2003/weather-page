@@ -20,7 +20,7 @@ interface ITemperatureProvider {
 export const TemperatureProviderContext = createContext<ITemperatureContext | undefined>(undefined)
 
 const TemperatureProvider: FC<ITemperatureProvider> = ({children}) => {
-    const [unit, setUnit] = useState<TemperatureUnits>(TemperatureUnits.FAHRENHEIT)
+    const [unit, setUnit] = useState<TemperatureUnits>(TemperatureUnits.CELSIUS)
 
     return (
         <TemperatureProviderContext.Provider value={{unit, setUnit}}>

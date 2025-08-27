@@ -1,15 +1,5 @@
-import * as React from "react";
 import {createContext, type FC, useContext, useEffect, useState} from "react";
-
-interface IFavoriteContext {
-    cities: string[];
-    setCities: React.Dispatch<React.SetStateAction<string[]>>;
-    addCity: (city: string) => void;
-}
-
-interface IFavoritesProvider {
-    children: React.ReactNode;
-}
+import type { IFavoriteContext, IFavoritesProvider } from '../constants'
 
 export const FavoriteProviderContext = createContext<IFavoriteContext | null>(null);
 
